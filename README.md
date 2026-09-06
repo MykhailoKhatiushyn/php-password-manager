@@ -8,6 +8,7 @@ An object-oriented PHP application designed for generating custom passwords and 
 - **Version 3:** OOP `Database` connection class (PDO) implementation
 - **Version 4:** OOP `User` class for authentication and AES master key management
 - **Version 5:** OOP `PasswordVault` class for encrypted vault item storage and retrieval
+- **Version 6:** Web GUI interfaces (Registration, Login, Dashboard, Logout)
 
 ## Features
 - **Customizable Password Generation:** Set parameters for length, uppercase, lowercase, numeric, and special characters.
@@ -15,3 +16,4 @@ An object-oriented PHP application designed for generating custom passwords and 
 - **PDO Database Abstraction:** Secure MySQL connection handling using prepared statements.
 - **Master Key Security:** Unique AES key generated per user, encrypted using the user's plain password, and decrypted into session on login.
 - **Encrypted Vault Storage:** Automatic timestamping and AES encryption of saved website/app credentials.
+- **Web Interface:** Interactive dashboard with parameter controls, live password creation, and vault listing.

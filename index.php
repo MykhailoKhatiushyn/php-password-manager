@@ -1,6 +1,9 @@
 <?php
-require_once 'classes/PasswordGenerator.php';
+session_start();
 
-// Example matching task requirement: 9 chars (2 lower, 3 upper, 2 special, 2 numbers)
-$generator = new PasswordGenerator(9, 3, 2, 2, 2);
-echo "Generated Password: " . $generator->generate();
+if (isset($_SESSION['user_id'])) {
+    header('Location: dashboard.php');
+} else {
+    header('Location: login.php');
+}
+exit;
