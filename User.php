@@ -74,4 +74,44 @@ class User
         session_unset();
         session_destroy();
     }
+    public function changePassword(int $userId, string $oldPlainPassword, string $newPlainPassword): bool 
+{
+    $stmt = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+    $stmt->execute([':id' => $userId]);
+    $user = $stmt->fetch();
+
+    if (!$user || !password_verify($oldPlainPassword, $user['password'])) {
+        return false;
+    }
+
+    // 1. Decrypt the persistent master KEY using the OLD password
+    $masterKey = $this->crypto->decrypt($user['encrypted_key'], $oldPlainPassword);
+    if ($masterKey === null) {
+        return false;
+    }
+
+    // 2. Re-encrypt the EXACT SAME master KEY using the NEW password
+    $reEncryptedMasterKey = $this->crypto->encrypt($masterKey, $newPlainPassword);
+
+    // 3. Hash the new login password
+    $newHashedPassword = password_hash($newPlainPassword, PASSWORD_DEFAULT);
+
+    // 4. Update the user record in MySQL
+    $updateStmt = $this->db->prepare(
+        "UPDATE users SET password = :password, encrypted_key = :encrypted_key WHERE id = :id"
+    );
+
+    $success = $updateStmt->execute([
+        ':password' => $newHashedPassword,
+        ':encrypted_key' => $reEncryptedMasterKey,
+        ':id' => $userId
+    ]);
+
+    if ($success) {
+        // Keep active session updated with master key
+        $_SESSION['master_key'] = $masterKey;
+    }
+
+    return $success;
+}
 }

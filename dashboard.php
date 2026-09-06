@@ -56,7 +56,7 @@ $passwords = $vault->getPasswords($_SESSION['user_id']);
 </head>
 <body>
     <h1>User Dashboard</h1>
-    <p>Logged in as: <strong><?= htmlspecialchars($_SESSION['username']) ?></strong> | <a href="logout.php">Logout</a></p>
+    <p>Logged in as: <strong><?= htmlspecialchars($_SESSION['username']) ?></strong> | <a href="change_password.php">Change Password</a> | <a href="logout.php">Logout</a></p>
 
     <!-- Password Generator GUI -->
     <div class="card">
